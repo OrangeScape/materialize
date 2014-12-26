@@ -139,20 +139,26 @@
 
 
           // Create Dropdown structure
-        selectOptions.each(function () {
-          options.append($('<li><span>' + $(this).html() + '</span></li>'));
-        });
-
-
-        options.find('li').each(function (i) {
-          var $curr_select = $select;
-          $(this).click(function () {
-            $curr_select.find('option').eq(i + 1).prop('selected', true);
-            $newSelect.html($(this).text());
+          selectOptions.each(function () {
+              options.append($('<li>').attr("data-option-value",$(this).val()).append($('<span>').append($(this).html())));
           });
-        });
 
-        // Wrap Elements
+
+          options.find('li').each(function (i) {
+              var $curr_select = $select;
+              $(this).click(function () {
+                  $curr_select.find('option[value="' + $(this).data("option-value") + '"]').prop('selected', true);
+                  $curr_select.trigger("change");
+              });
+          });
+
+          //Reverse Set Value on New Select when actual value of select changes
+          $select.change(function(){
+              $newSelect.html($select.val());
+          });
+
+
+          // Wrap Elements
         $select.wrap(wrapper);
 
 
